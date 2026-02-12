@@ -154,6 +154,7 @@
     vscode
     claude-code
     catppuccin-sddm
+    htop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
