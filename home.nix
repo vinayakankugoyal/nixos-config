@@ -23,4 +23,15 @@
   xdg.configFile."noctalia/settings.json".source = ./configs/noctalia/settings.json;
   xdg.configFile."noctalia/colors.json".source = ./configs/noctalia/colors.json;
   xdg.configFile."noctalia/plugins.json".source = ./configs/noctalia/plugins.json;
+
+  # Kitty terminal
+  programs.kitty = {
+    enable = true;
+    theme = "Tokyo Night";
+    # Add any additional settings here as needed
+    # settings = {
+    #   font_size = 12;
+    #   font_family = "monospace";
+    # };
+  };
 }
