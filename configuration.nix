@@ -1,17 +1,49 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# and in the NixOS manual (accessible by running 'nixos-help').
 
 { config, pkgs, ... }:
 
+let
+  # Home Manager (pinned to release-25.11 to match nixpkgs)
+  home-manager = builtins.fetchTarball {
+    url = "https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz";
+  };
+
+  # rDNS package from GitHub
+  rdnsPkg = pkgs.rustPlatform.buildRustPackage {
+    pname = "rdns";
+    version = "0.1.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "vinayakankugoyal";
+      repo = "rdns";
+      rev = "main";
+      hash = "sha256-Z6yEerhoU2s8Ac3Y9KpaHfInTpZB8Uyf/qzF8a5OXj0=";
+    };
+    cargoHash = "sha256-s7YGU2J7fZp3P46c7uKOjqTWhuAQx88o3H1ZMt/P5zU=";
+  };
+
+  # Noctalia shell from GitHub
+  noctaliaSrc = pkgs.fetchFromGitHub {
+    owner = "noctalia-dev";
+    repo = "noctalia-shell";
+    rev = "main";
+    hash = "sha256-qMb97e27sSrtLb7K/9JlhG5ccKEklHZPa3txoMVagGw=";
+  };
+  noctalia-shell = pkgs.callPackage "${noctaliaSrc}/nix/package.nix" {};
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      (import "${home-manager}/nixos")
     ];
 
-  # Enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Home Manager configuration
+  home-manager.useGlobalPkgs = true;
+  home-manager.useUserPackages = true;
+  home-manager.backupFileExtension = "backup";
+  home-manager.users.murd3rbot = import ./home.nix;
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -70,7 +102,7 @@
   # Enable the GNOME Desktop Environment.
   #services.xserver.displayManager.gdm.enable = true;
   #services.xserver.desktopManager.gnome.enable = true;
-  
+
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
@@ -102,12 +134,13 @@
     #media-session.enable = true;
   };
 
-  security.pam.services.hyprlock = {};
+  # PAM for lock screen authentication
+  security.pam.services.quickshell = {};
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.murd3rbot = {
     isNormalUser = true;
     description = "Vinayak Goyal";
@@ -155,7 +188,7 @@
     claude-code
     catppuccin-sddm
     htop
-  ];
+  ] ++ [ noctalia-shell ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -173,7 +206,7 @@
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
     serviceConfig = {
-      ExecStart = "/home/murd3rbot/projects/rdns/target/release/rdns --no-tui";
+      ExecStart = "${rdnsPkg}/bin/rdns --no-tui";
       Restart = "always";
       RestartSec = "5s";
       User = "root";
@@ -197,7 +230,7 @@
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # on your system were taken. It's perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
