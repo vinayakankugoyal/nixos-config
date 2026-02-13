@@ -31,6 +31,7 @@ let
     hash = "sha256-qMb97e27sSrtLb7K/9JlhG5ccKEklHZPa3txoMVagGw=";
   };
   noctalia-shell = pkgs.callPackage "${noctaliaSrc}/nix/package.nix" {};
+  noctaliaHomeModule = import "${noctaliaSrc}/nix/home-module.nix";
 in
 {
   imports =
@@ -43,11 +44,19 @@ in
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
-  home-manager.users.murd3rbot = import ./home.nix;
+  home-manager.users.murd3rbot = {
+    imports = [
+      ./home.nix
+      noctaliaHomeModule
+    ];
+  };
+  home-manager.extraSpecialArgs = {
+    noctaliaPackage = noctalia-shell;
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.canTouchEfiVariables = false;
   boot.resumeDevice = "/dev/nvme0n1p3";
 
   services.logind.settings = {
@@ -65,6 +74,9 @@ in
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
+
+  # Enable UPower for battery monitoring
+  services.upower.enable = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
