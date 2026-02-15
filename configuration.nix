@@ -156,7 +156,7 @@ in
   users.users.murd3rbot = {
     isNormalUser = true;
     description = "Vinayak Goyal";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "ydotool" "input" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -165,10 +165,18 @@ in
   # Install firefox.
   programs.firefox.enable = true;
 
-  programs.hyprland = {
+  programs.niri = {
     enable = true;
-    xwayland.enable = true;
   };
+
+  # Hyprland disabled in favor of Niri
+  # programs.hyprland = {
+  #   enable = true;
+  #   xwayland.enable = true;
+  # };
+
+  # Enable ydotool for Wayland mouse control
+  programs.ydotool.enable = true;
 
   environment.sessionVariables.NIX_OZONE_WL = "1";
 

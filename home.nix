@@ -8,8 +8,8 @@
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
-  # Hyprland config
-  xdg.configFile."hypr/hyprland.conf".source = ./configs/hyprland.conf;
+  # Niri config
+  xdg.configFile."niri/config.kdl".source = ./configs/niri.kdl;
 
   # Noctalia shell with proper home-manager module
   programs.noctalia-shell = {
