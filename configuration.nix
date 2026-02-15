@@ -204,7 +204,12 @@ in
     wl-clipboard
     hyprpaper
     tmux
-    vscode
+    (pkgs.vscode.override {
+      commandLineArgs = [
+        "--enable-features=WaylandWindowDecorations"
+        "--ozone-platform-hint=auto"
+      ];
+    })
     claude-code
     catppuccin-sddm
     htop
