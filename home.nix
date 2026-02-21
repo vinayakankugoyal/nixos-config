@@ -34,4 +34,13 @@
     #   font_family = "monospace";
     # };
   };
+
+  # VSCode extensions
+  programs.vscode = {
+    enable = true;
+    extensions = with pkgs.vscode-extensions; [
+      ms-python.python
+      enkia.tokyo-night
+    ];
+  };
 }
