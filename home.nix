@@ -29,7 +29,7 @@
     enable = true;
     theme = "Tokyo Night";
     settings = {
-      shell = "tmux new-session -A -s main";
+      shell = "tmux";
     };
   };
 
