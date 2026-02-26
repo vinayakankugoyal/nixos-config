@@ -28,19 +28,40 @@
   programs.kitty = {
     enable = true;
     theme = "Tokyo Night";
-    # Add any additional settings here as needed
-    # settings = {
-    #   font_size = 12;
-    #   font_family = "monospace";
-    # };
+    settings = {
+      shell = "tmux new-session -A -s main";
+    };
   };
 
   # VSCode extensions
   programs.vscode = {
     enable = true;
+    package = pkgs.vscode.override {
+      commandLineArgs = [
+        "--enable-features=WaylandWindowDecorations"
+        "--ozone-platform-hint=auto"
+      ];
+    };
     extensions = with pkgs.vscode-extensions; [
       ms-python.python
       enkia.tokyo-night
     ];
+  };
+
+  # Tmux configuration
+  programs.tmux = {
+    enable = true;
+    keyMode = "vi";
+  };
+
+  # Git configuration
+  programs.git = {
+    enable = true;
+    userEmail = "vinayakankugoyal@gmail.com";
+    userName = "Vinayak Goyal";
+    extraConfig = {
+      core.editor = "vim";
+      url."git@github.com:".insteadOf = "https://github.com/";
+    };
   };
 }

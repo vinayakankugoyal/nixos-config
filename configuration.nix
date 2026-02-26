@@ -62,7 +62,7 @@ in
   services.logind.settings = {
    Login = {
     HandleLidSwitch = "suspend-then-hibernate";
-    HandleLidSwitchExternalPower = "suspend";
+    HandleLidSwitchExternalPower = "ignore";
    };
   };
 
@@ -204,12 +204,6 @@ in
     wl-clipboard
     hyprpaper
     tmux
-    (pkgs.vscode.override {
-      commandLineArgs = [
-        "--enable-features=WaylandWindowDecorations"
-        "--ozone-platform-hint=auto"
-      ];
-    })
     claude-code
     catppuccin-sddm
     htop
