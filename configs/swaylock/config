@@ -1,0 +1,52 @@
+# Swaylock config - Noctalia theme
+
+# Background
+color=070722
+
+# Ring colors
+ring-color=a9aefe
+ring-ver-color=fff59b
+ring-wrong-color=fd4663
+ring-clear-color=9bfece
+
+# Key highlight
+key-hl-color=fff59b
+bs-hl-color=fd4663
+
+# Inside circle
+inside-color=11112d
+inside-ver-color=11112d
+inside-wrong-color=11112d
+inside-clear-color=11112d
+
+# Line (separator)
+line-color=21215f
+line-ver-color=21215f
+line-wrong-color=21215f
+line-clear-color=21215f
+
+# Text
+text-color=f3edf7
+text-ver-color=fff59b
+text-wrong-color=fd4663
+text-clear-color=9bfece
+
+# Layout text
+layout-text-color=7c80b4
+
+# Indicator
+indicator-radius=120
+indicator-thickness=12
+
+# Appearance
+font=Sans
+font-size=24
+
+# Effects
+fade-in=0.2
+effect-blur=10x5
+
+# Behavior
+ignore-empty-password
+show-failed-attempts
+daemonize

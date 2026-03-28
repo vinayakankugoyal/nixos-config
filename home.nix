@@ -8,6 +8,9 @@
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
+  # Allow unfree packages for nix-shell and other user-level Nix commands
+  nixpkgs.config.allowUnfree = true;
+
   # Niri config
   xdg.configFile."niri/config.kdl".source = ./configs/niri.kdl;
 
@@ -23,6 +26,9 @@
   xdg.configFile."noctalia/settings.json".source = ./configs/noctalia/settings.json;
   xdg.configFile."noctalia/colors.json".source = ./configs/noctalia/colors.json;
   xdg.configFile."noctalia/plugins.json".source = ./configs/noctalia/plugins.json;
+
+  # Swaylock config
+  xdg.configFile."swaylock/config".source = ./configs/swaylock/config;
 
   # Kitty terminal
   programs.kitty = {

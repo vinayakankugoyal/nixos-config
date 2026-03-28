@@ -147,7 +147,7 @@ in
   };
 
   # PAM for lock screen authentication
-  security.pam.services.noctalia-shell = {};
+  security.pam.services.swaylock = {};
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -207,6 +207,9 @@ in
     claude-code
     catppuccin-sddm
     htop
+    zoom-us
+    xwayland-satellite
+    swaylock-effects
   ] ++ [ noctalia-shell ];
 
   # Some programs need SUID wrappers, can be configured further or are
