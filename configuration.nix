@@ -10,28 +10,24 @@ let
     url = "https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz";
   };
 
-  # rDNS package from GitHub
+  # Nixpkgs unstable for noctalia-shell
+  pkgs-unstable = import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+  }) { system = pkgs.system; config = pkgs.config; };
+
+  # rDNS package from GitHub (with bounds checking fix)
   rdnsPkg = pkgs.rustPlatform.buildRustPackage {
     pname = "rdns";
     version = "0.1.0";
     src = pkgs.fetchFromGitHub {
       owner = "vinayakankugoyal";
       repo = "rdns";
-      rev = "main";
-      hash = "sha256-Z6yEerhoU2s8Ac3Y9KpaHfInTpZB8Uyf/qzF8a5OXj0=";
+      rev = "131e9169af2ee568a982e0748b22f6cc0a544b86";
+      hash = "sha256-are8DKy7P56sEnKCERrHan22UrEDRvMVFX2YktDOtuU=";
     };
     cargoHash = "sha256-s7YGU2J7fZp3P46c7uKOjqTWhuAQx88o3H1ZMt/P5zU=";
   };
 
-  # Noctalia shell from GitHub
-  noctaliaSrc = pkgs.fetchFromGitHub {
-    owner = "noctalia-dev";
-    repo = "noctalia-shell";
-    rev = "main";
-    hash = "sha256-qMb97e27sSrtLb7K/9JlhG5ccKEklHZPa3txoMVagGw=";
-  };
-  noctalia-shell = pkgs.callPackage "${noctaliaSrc}/nix/package.nix" {};
-  noctaliaHomeModule = import "${noctaliaSrc}/nix/home-module.nix";
 in
 {
   imports =
@@ -47,11 +43,7 @@ in
   home-manager.users.murd3rbot = {
     imports = [
       ./home.nix
-      noctaliaHomeModule
     ];
-  };
-  home-manager.extraSpecialArgs = {
-    noctaliaPackage = noctalia-shell;
   };
 
   # Bootloader.
@@ -183,6 +175,9 @@ in
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable experimental Nix features
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Add fonts section to your configuration.nix
   fonts.packages = with pkgs; [
     noto-fonts
@@ -210,7 +205,7 @@ in
     zoom-us
     xwayland-satellite
     swaylock-effects
-  ] ++ [ noctalia-shell ];
+  ] ++ [ pkgs-unstable.noctalia-shell ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -241,12 +236,16 @@ in
     };
   };
 
+  # Enable Tailscale
+  services.tailscale.enable = true;
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedUDPPorts = [ 53 ];  # Allow DNS queries from Tailscale
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];  # Trust Tailscale interface
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
