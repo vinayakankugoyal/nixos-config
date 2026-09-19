@@ -27,7 +27,9 @@
     enable = true;
     theme = "Tokyo Night";
     settings = {
-      shell = "tmux";
+      # Attach to the shared "main" tmux session (creating it if needed);
+      # each new Kitty window opens a new tmux window in that session.
+      shell = "tmux new-session -A -s main";
     };
   };
 
@@ -46,8 +48,8 @@
     ];
   };
 
-  # Bash (managed by Home Manager so shell integrations like Starship get wired in)
-  programs.bash.enable = true;
+  # Fish shell (native gray autosuggestions + syntax highlighting)
+  programs.fish.enable = true;
 
   # Starship prompt
   programs.starship = {
@@ -58,6 +60,7 @@
   programs.tmux = {
     enable = true;
     keyMode = "vi";
+    shell = "${pkgs.fish}/bin/fish";
   };
 
   # Git configuration

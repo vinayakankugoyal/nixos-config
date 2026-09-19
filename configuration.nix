@@ -148,6 +148,7 @@ in
   users.users.murd3rbot = {
     isNormalUser = true;
     description = "Vinayak Goyal";
+    shell = pkgs.fish;
     extraGroups = [ "networkmanager" "wheel" "ydotool" "input" ];
     packages = with pkgs; [
     #  thunderbird
@@ -156,6 +157,9 @@ in
 
   # Install firefox.
   programs.firefox.enable = true;
+
+  # Fish shell (native autosuggestions + syntax highlighting)
+  programs.fish.enable = true;
 
   programs.niri = {
     enable = true;
