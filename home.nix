@@ -46,6 +46,14 @@
     ];
   };
 
+  # Bash (managed by Home Manager so shell integrations like Starship get wired in)
+  programs.bash.enable = true;
+
+  # Starship prompt
+  programs.starship = {
+    enable = true;
+  };
+
   # Tmux configuration
   programs.tmux = {
     enable = true;

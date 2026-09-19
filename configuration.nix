@@ -22,8 +22,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "vinayakankugoyal";
       repo = "rdns";
-      rev = "131e9169af2ee568a982e0748b22f6cc0a544b86";
-      hash = "sha256-are8DKy7P56sEnKCERrHan22UrEDRvMVFX2YktDOtuU=";
+      rev = "3d229096e3bcdd3b020d17f7364c8d0fb76199ed";
+      hash = "sha256-ge14CCXUlX0nRdgoa1EhTzegK87oUBkNymwB+jwikP8=";
     };
     cargoHash = "sha256-s7YGU2J7fZp3P46c7uKOjqTWhuAQx88o3H1ZMt/P5zU=";
   };
@@ -199,7 +199,7 @@ in
     wl-clipboard
     hyprpaper
     tmux
-    claude-code
+    pkgs-unstable.claude-code
     catppuccin-sddm
     htop
     zoom-us
@@ -236,8 +236,13 @@ in
     };
   };
 
-  # Enable Tailscale
-  services.tailscale.enable = true;
+  # Enable Tailscale, with Tailscale SSH so this machine can be reached
+  # over the Tailnet as a remote server. Auth is handled by Tailnet ACLs;
+  # only devices on the Tailnet can connect. No local SSH keys to manage.
+  services.tailscale = {
+    enable = true;
+    extraUpFlags = [ "--ssh" ];
+  };
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
